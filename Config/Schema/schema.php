@@ -55,6 +55,7 @@ class P4pgameSchema extends CakeSchema {
 		'fight_date' => array('type' => 'date', 'null' => false, 'default' => null),
 		'bets_close_time' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'result' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'promoted' => array('type' => 'boolean', 'null' => false, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'indexes' => array(
@@ -95,7 +96,7 @@ class P4pgameSchema extends CakeSchema {
 	public $users = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 5, 'key' => 'primary'),
 		'username' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'key' => 'unique', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'password' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'password' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 64, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'email' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 100, 'key' => 'unique', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'credits' => array('type' => 'integer', 'null' => false, 'default' => '1000'),
 		'active' => array('type' => 'boolean', 'null' => false, 'default' => '0'),

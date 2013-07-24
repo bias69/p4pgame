@@ -1,5 +1,6 @@
 <?php
 App::uses('AppModel', 'Model');
+App::uses('AuthComponent', 'Controller/Component');
 /**
  * User Model
  *
@@ -23,6 +24,10 @@ class User extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'unique' => array(
+				'rule' => 'isUnique',
+				'message' => 'Username already in use'
+			)
 		),
 		'password' => array(
 			'notempty' => array(
@@ -33,6 +38,10 @@ class User extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'confirmation_password_match' => array(
+				'rule' => 'checkPasswordMatch',
+				'message' => 'Password and password confirmation don\'t match'
+			)
 		),
 		'email' => array(
 			'email' => array(
@@ -43,6 +52,10 @@ class User extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'unique' => array(
+				'rule' => 'isUnique',
+				'message' => 'Email already in use'
+			)			
 		),
 		'credits' => array(
 			'numeric' => array(
@@ -77,6 +90,21 @@ class User extends AppModel {
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
+
+
+/**
+ * Passwords match validation
+ * @return boolean
+ */
+
+	public function checkPasswordMatch() {
+		if(isset($this->data['User']['password']) && isset($this->data['User']['password_confirmation'])) {
+			return $this->data['User']['password'] === $this->data['User']['password_confirmation'];
+		}
+		return false;
+	}
+
+
 
 /**
  * hasMany associations
@@ -122,5 +150,16 @@ class User extends AppModel {
 			'insertQuery' => ''
 		)
 	);
+
+/**
+ * beforeSave callback
+ * @return boolean
+ */
+	public function beforeSave($options = array()) {
+		if (!$this->id) {
+			$this->data['User']['password'] = AuthComponent::password($this->data['User']['password'], 'sha256', true);
+		}
+		return true;
+	}
 
 }

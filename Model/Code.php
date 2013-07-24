@@ -1,5 +1,6 @@
 <?php
 App::uses('AppModel', 'Model');
+App::uses('CakeEmail', 'Network/Email');
 /**
  * Code Model
  *
@@ -41,4 +42,20 @@ class Code extends AppModel {
 			'order' => ''
 		)
 	);
+
+
+/**
+ * sendActivation method
+ * @return void
+ */
+	public function sendActivationCode($user_id = null) {
+		if($user_id) {
+			$user = $this->User->find('first', array('conditions' => array('id' => $user_id), 'fields' => array('username', 'email')));
+			$code = $this->find('first', array('conditions' => array('user_id' => $user_id)));
+			$email = new CakeEmail('default');
+			$email->to(array($user['User']['email'] => $user['User']['username']));
+			$email->viewVars(array('username' => $user['User']['username'], 'code' => $code['Code']['id']));
+			$email->send();
+		}
+	}
 }

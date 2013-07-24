@@ -15,6 +15,18 @@ class UsersController extends AppController {
  */
 	public $components = array('Paginator');
 
+
+/**
+ * beforeFilter method
+ *
+ * @return void
+ */
+
+	public function beforeFilter() {
+		parent::beforeFilter();
+		$this->Auth->allow();
+	}
+
 /**
  * index method
  *
@@ -24,6 +36,35 @@ class UsersController extends AppController {
 		$this->User->recursive = 0;
 		$this->set('users', $this->Paginator->paginate());
 	}
+
+
+/**
+ * login method
+ *
+ * @return void
+ */
+	public function login() {
+	    if ($this->request->is('post')) {
+	        if ($this->Auth->login()) {
+	        	$this->Session->setFlash(__('You are logged in now'));
+	            return $this->redirect($this->Auth->redirectUrl());
+	        } else {
+	            $this->Session->setFlash(__('Username or password is incorrect'), 'default', array(), 'auth');
+	        }
+	    }
+	}
+
+
+/**
+ * logout method
+ * @return void
+ */
+
+	public function logout() {
+		$this->Session->setFlash(__('You\'ve been logged out'), 'default', array(), 'auth');
+	    $this->redirect($this->Auth->logout());
+	}
+
 
 /**
  * view method
@@ -48,16 +89,22 @@ class UsersController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->User->create();
+			$this->request->data['User']['active'] = 0;
+			$this->request->data['User']['credits'] = 1000;
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved'));
+				$this->User->Code->data['Code']['user_id'] = $this->User->id;
+				$this->User->Code->save();
+				$this->User->Code->sendActivationCode($this->User->id);
+				$this->Session->setFlash(__('The user has been saved and activation code sent to your email address.'));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
 			}
 		}
-		$bets = $this->User->Bet->find('list');
-		$this->set(compact('bets'));
 	}
+
+
+
 
 /**
  * edit method
