@@ -16,6 +16,18 @@ class FightersController extends AppController {
 	public $components = array('Paginator');
 
 /**
+ * admin_index method
+ *
+ * @return void
+ */
+	public function admin_index() {
+		$this->Fighter->recursive = 0;
+		$this->set('fighters', $this->Paginator->paginate());
+	}
+
+
+
+/**
  * index method
  *
  * @return void

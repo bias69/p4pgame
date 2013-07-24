@@ -45,6 +45,15 @@ class UsersController extends AppController {
  */
 	public function login() {
 	    if ($this->request->is('post')) {
+	    	$this->User->recursive = 0;
+	    	$user_activation_status = $this->User->find('first', array('conditions' => 
+	    		array('username' => $this->request->data['User']['username']), 
+	    		'fields' => array('id', 'active')));
+	    	if(!$user_activation_status['User']['active']) {
+	    		$this->Session->setFlash(__('You have to activate your account before logging in'));
+	    		return $this->redirect(array('controller' => 'users', 'action' => 'login'));
+	    	}
+
 	        if ($this->Auth->login()) {
 	        	$this->Session->setFlash(__('You are logged in now'));
 	            return $this->redirect($this->Auth->redirectUrl());

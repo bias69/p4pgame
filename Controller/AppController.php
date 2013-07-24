@@ -42,4 +42,15 @@ class AppController extends Controller {
         ), 
 		'Session');
 
+	public function beforeFilter() {
+		if($this->request->prefix === 'admin') {
+			if($this->Auth->loggedIn() && ($this->Auth->user('role') === 'admin')) {
+				return;
+			}
+			else {
+				throw new BadRequestException('Not found');
+			}
+		}
+	}
+
 }

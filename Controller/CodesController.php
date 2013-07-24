@@ -22,6 +22,7 @@ class CodesController extends AppController {
 
 /**
  * activate_account method
+ * @throws NotFoundException, BadRequestException
  * @return void
  */
 
