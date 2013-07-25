@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('User', 'Model');
 /**
  * Events Controller
  *
@@ -16,23 +17,23 @@ class EventsController extends AppController {
 	public $components = array('Paginator');
 
 /**
- * index method
+ * admin_index method
  *
  * @return void
  */
-	public function index() {
+	public function admin_index() {
 		$this->Event->recursive = 0;
 		$this->set('events', $this->Paginator->paginate());
 	}
 
 /**
- * view method
+ * admin_view method
  *
  * @throws NotFoundException
  * @param string $id
  * @return void
  */
-	public function view($id = null) {
+	public function admin_view($id = null) {
 		if (!$this->Event->exists($id)) {
 			throw new NotFoundException(__('Invalid event'));
 		}
@@ -41,14 +42,15 @@ class EventsController extends AppController {
 	}
 
 /**
- * add method
+ * admin_add method
  *
  * @return void
  */
-	public function add() {
+	public function admin_add() {
 		if ($this->request->is('post')) {
 			$this->Event->create();
 			if ($this->Event->save($this->request->data)) {
+				$this->_giveCreditsToBrokeUsers();
 				$this->Session->setFlash(__('The event has been saved'));
 				$this->redirect(array('action' => 'index'));
 			} else {
@@ -60,13 +62,13 @@ class EventsController extends AppController {
 	}
 
 /**
- * edit method
+ * admin_edit method
  *
  * @throws NotFoundException
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function admin_edit($id = null) {
 		if (!$this->Event->exists($id)) {
 			throw new NotFoundException(__('Invalid event'));
 		}
@@ -105,4 +107,20 @@ class EventsController extends AppController {
 		$this->Session->setFlash(__('Event was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}
+
+/**
+ * _giveCreditsToBrokeUsers method
+ * @return void
+ */
+
+	private function _giveCreditsToBrokeUsers() {
+		$user = new User();
+		$user->recursive = 0;
+		$userList = $user->find('all', array('conditions' => array('credits =' => 0), 'fields' => array('id', 'credits')));
+		foreach ($userList as &$userDetails) {
+			$userDetails['User']['credits'] = 75;
+		}
+		$user->saveAll($userList);
+	}
+
 }

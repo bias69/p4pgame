@@ -43,6 +43,10 @@ class BetsUser extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'validAmmount' => array(
+				'rule' => array('validAmmount'),
+				'message' => 'You don\'t have enough credits.'
+			)
 		),
 	);
 
@@ -69,4 +73,17 @@ class BetsUser extends AppModel {
 			'order' => ''
 		)
 	);
+
+/**
+ * validAmmount method
+ * @return boolean
+ */
+
+	public function validAmmount() {
+		$this->User->recursive = 0;
+		$users_credits = $this->User->read('credits', AuthComponent::user('id'));
+		if($this->data['BetsUser']['ammount'] <= $users_credits['User']['credits']) {
+			return true;
+		}
+	}
 }

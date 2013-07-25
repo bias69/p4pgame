@@ -5,7 +5,7 @@
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('record'); ?></th>
-			<th><?php echo $this->Paginator->sort('image_filename'); ?></th>
+			<th><?php echo $this->Paginator->sort('photo'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('modified'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -15,7 +15,7 @@
 		<td><?php echo h($fighter['Fighter']['id']); ?>&nbsp;</td>
 		<td><?php echo h($fighter['Fighter']['name']); ?>&nbsp;</td>
 		<td><?php echo h($fighter['Fighter']['record']); ?>&nbsp;</td>
-		<td><?php echo h($fighter['Fighter']['image_filename']); ?>&nbsp;</td>
+		<td><?php echo h($fighter['Fighter']['photo']); ?>&nbsp;</td>
 		<td><?php echo h($fighter['Fighter']['created']); ?>&nbsp;</td>
 		<td><?php echo h($fighter['Fighter']['modified']); ?>&nbsp;</td>
 		<td class="actions">

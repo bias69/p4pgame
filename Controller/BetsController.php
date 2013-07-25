@@ -16,11 +16,11 @@ class BetsController extends AppController {
 	public $components = array('Paginator');
 
 /**
- * index method
+ * admin_index method
  *
  * @return void
  */
-	public function index() {
+	public function admin_index() {
 		$this->Bet->recursive = 0;
 		$this->set('bets', $this->Paginator->paginate());
 	}
@@ -41,11 +41,11 @@ class BetsController extends AppController {
 	}
 
 /**
- * add method
+ * admin_add method
  *
  * @return void
  */
-	public function add() {
+	public function admin_add() {
 		if ($this->request->is('post')) {
 			$this->Bet->create();
 			if ($this->Bet->save($this->request->data)) {
@@ -56,18 +56,17 @@ class BetsController extends AppController {
 			}
 		}
 		$events = $this->Bet->Event->find('list');
-		$users = $this->Bet->User->find('list');
-		$this->set(compact('events', 'users'));
+		$this->set(compact('events'));
 	}
 
 /**
- * edit method
+ * admin_edit method
  *
  * @throws NotFoundException
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function admin_edit($id = null) {
 		if (!$this->Bet->exists($id)) {
 			throw new NotFoundException(__('Invalid bet'));
 		}

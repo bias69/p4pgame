@@ -15,6 +15,12 @@ class BetsUsersController extends AppController {
  */
 	public $components = array('Paginator');
 
+
+	public function beforeFilter() {
+		parent::beforeFilter();
+		$this->Auth->deny();
+	}
+
 /**
  * index method
  *
@@ -49,6 +55,7 @@ class BetsUsersController extends AppController {
 		if ($this->request->is('post')) {
 			$this->BetsUser->create();
 			if ($this->BetsUser->save($this->request->data)) {
+				$this->_subtractAmmount();
 				$this->Session->setFlash(__('The bets user has been saved'));
 				$this->redirect(array('action' => 'index'));
 			} else {
@@ -106,5 +113,18 @@ class BetsUsersController extends AppController {
 		}
 		$this->Session->setFlash(__('Bets user was not deleted'));
 		$this->redirect(array('action' => 'index'));
+	}
+
+
+/**
+ * _subtractAmmount method
+ * @return void
+ */
+	private function _subtractAmmount() {
+		$this->BetsUser->User->recursive = 0;
+		$this->BetsUser->User->read(array('credits'), $this->Auth->user('id'));
+		$credits = (int) $this->BetsUser->User->field('credits') - (int) $this->request->data['BetsUser']['ammount'];
+		$this->BetsUser->User->set('credits', $credits);
+		$this->BetsUser->User->save();
 	}
 }

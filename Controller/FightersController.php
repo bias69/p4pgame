@@ -25,39 +25,12 @@ class FightersController extends AppController {
 		$this->set('fighters', $this->Paginator->paginate());
 	}
 
-
-
 /**
- * index method
+ * admin_add method
  *
  * @return void
  */
-	public function index() {
-		$this->Fighter->recursive = 0;
-		$this->set('fighters', $this->Paginator->paginate());
-	}
-
-/**
- * view method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function view($id = null) {
-		if (!$this->Fighter->exists($id)) {
-			throw new NotFoundException(__('Invalid fighter'));
-		}
-		$options = array('conditions' => array('Fighter.' . $this->Fighter->primaryKey => $id));
-		$this->set('fighter', $this->Fighter->find('first', $options));
-	}
-
-/**
- * add method
- *
- * @return void
- */
-	public function add() {
+	public function admin_add() {
 		if ($this->request->is('post')) {
 			$this->Fighter->create();
 			if ($this->Fighter->save($this->request->data)) {
@@ -70,13 +43,35 @@ class FightersController extends AppController {
 	}
 
 /**
- * edit method
+ * admin_delete method
  *
  * @throws NotFoundException
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function admin_delete($id = null) {
+		$this->Fighter->id = $id;
+		if (!$this->Fighter->exists()) {
+			throw new NotFoundException(__('Invalid fighter'));
+		}
+		$this->request->onlyAllow('post', 'delete');
+		if ($this->Fighter->delete()) {
+			$this->Session->setFlash(__('Fighter deleted'));
+			$this->redirect(array('action' => 'index'));
+		}
+		$this->Session->setFlash(__('Fighter was not deleted'));
+		$this->redirect(array('action' => 'index'));
+	}
+
+
+/**
+ * admin_edit method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function admin_edit($id = null) {
 		if (!$this->Fighter->exists($id)) {
 			throw new NotFoundException(__('Invalid fighter'));
 		}
@@ -93,24 +88,4 @@ class FightersController extends AppController {
 		}
 	}
 
-/**
- * delete method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function delete($id = null) {
-		$this->Fighter->id = $id;
-		if (!$this->Fighter->exists()) {
-			throw new NotFoundException(__('Invalid fighter'));
-		}
-		$this->request->onlyAllow('post', 'delete');
-		if ($this->Fighter->delete()) {
-			$this->Session->setFlash(__('Fighter deleted'));
-			$this->redirect(array('action' => 'index'));
-		}
-		$this->Session->setFlash(__('Fighter was not deleted'));
-		$this->redirect(array('action' => 'index'));
-	}
 }

@@ -42,6 +42,12 @@ class AppController extends Controller {
         ), 
 		'Session');
 
+/**
+ * beforeFilter method
+ * @throws BadRequestException
+ * @return void
+ */
+
 	public function beforeFilter() {
 		if($this->request->prefix === 'admin') {
 			if($this->Auth->loggedIn() && ($this->Auth->user('role') === 'admin')) {
