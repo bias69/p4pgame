@@ -45,20 +45,12 @@ class UsersController extends AppController {
  */
 	public function login() {
 	    if ($this->request->is('post')) {
-	    	$this->User->recursive = 0;
-	    	$user_activation_status = $this->User->find('first', array('conditions' => 
-	    		array('username' => $this->request->data['User']['username']), 
-	    		'fields' => array('id', 'active')));
-	    	if(!$user_activation_status['User']['active']) {
-	    		$this->Session->setFlash(__('You have to activate your account before logging in'));
-	    		return $this->redirect(array('controller' => 'users', 'action' => 'login'));
-	    	}
-
 	        if ($this->Auth->login()) {
-	        	$this->Session->setFlash(__('You are logged in now'));
+	        	$this->Session->setFlash(__('You are logged in now'), 'flash_success');
 	            return $this->redirect($this->Auth->redirectUrl());
 	        } else {
-	            $this->Session->setFlash(__('Username or password is incorrect'), 'default', array(), 'auth');
+	        	$this->_checkAccountActivated();
+	            $this->Session->setFlash(__('Username or password is incorrect'), 'flash_warning', array(), 'auth');
 	        }
 	    }
 	}
@@ -161,4 +153,24 @@ class UsersController extends AppController {
 		$this->Session->setFlash(__('User was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}
+
+/**
+ * _checkAccountActivated method
+ * @return redirect
+ */
+
+	private function _checkAccountActivated() {
+	    	$this->User->recursive = 0;
+	    	$user_activation_status = $this->User->find('first', array('conditions' => 
+	    		array('username' => $this->request->data['User']['username']), 
+	    		'fields' => array('id', 'active')));
+	    	if(!empty($user_activation_status) && !$user_activation_status['User']['active']) {
+	    		$this->Session->setFlash(__('You have to activate your account before logging in'), 'flash_error', array(), 'auth');
+	    		return $this->redirect(array('controller' => 'users', 'action' => 'login'));
+	    	}
+	    	else {
+	    		return;
+	    	}
+	}
+
 }

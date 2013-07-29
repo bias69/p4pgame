@@ -1,23 +1,28 @@
-<div class="users form">
-<?php echo $this->Session->flash('auth'); ?>
-<?php echo $this->Form->create('User'); ?>
-	<fieldset>
-		<legend><?php echo __('Please enter your username and password to login:'); ?></legend>
-	<?php
-		echo $this->Form->input('username');
-		echo $this->Form->input('password');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Login')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Codes'), array('controller' => 'codes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Code'), array('controller' => 'codes', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Bets'), array('controller' => 'bets', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Bet'), array('controller' => 'bets', 'action' => 'add')); ?> </li>
-	</ul>
+<div class="row">
+	<div class="span12">
+		<div class="row">
+			<div class="span12">
+				<?php echo $this->Session->flash('auth'); ?>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span1"></div>
+			<div class="span11">
+				<h4>Please enter your username and password:</h4>
+			</div>
+		</div>
+		<div class="row">&nbsp;</div>
+		<?php echo $this->Form->create('User', array('class' => 'form-horizontal')); ?>
+		<div class="control-group">
+			<?php echo $this->Form->input('username', array('div' => false, 'label' => array('class' => 'control-label'), 
+			'before' => '<div class="control-group">', 'between' => '<div class="controls">', 'after' => '</div></div>')) ?>
+		</div>
+		<div class="control-group">
+			<?php echo $this->Form->input('password', array('div' => false, 'label' => array('class' => 'control-label'), 
+			'before' => '<div class="control-group">', 'between' => '<div class="controls">', 'after' => '</div></div>')) ?>
+		</div>
+		<div class="control-group">
+			<?php echo $this->Form->end(array('label' => __('Sign in'), 'class' => 'btn', 'div' => 'controls')) ?>
+		</div>
+	</div>
 </div>

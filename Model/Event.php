@@ -8,6 +8,9 @@ App::uses('AppModel', 'Model');
  */
 class Event extends AppModel {
 
+
+	public $actsAs = array('Containable');
+
 /**
  * Validation rules
  *
@@ -35,9 +38,9 @@ class Event extends AppModel {
 			),
 		),
 		'result' => array(
-			'alphanumeric' => array(
-				'rule' => array('alphaNumeric'),
-				'message' => 'only letters and numbers',
+			'custom' => array(
+				'rule' => '/^[a-zA-Z0-9\ ]+$/',
+				'message' => 'only letters, numbers and spaces',
 				'allowEmpty' => true,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule

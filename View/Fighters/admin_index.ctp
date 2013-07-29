@@ -1,48 +1,53 @@
-<div class="fighters index">
-	<h2><?php echo __('Fighters'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
-	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<th><?php echo $this->Paginator->sort('record'); ?></th>
-			<th><?php echo $this->Paginator->sort('photo'); ?></th>
-			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th><?php echo $this->Paginator->sort('modified'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
-	</tr>
-	<?php foreach ($fighters as $fighter): ?>
-	<tr>
-		<td><?php echo h($fighter['Fighter']['id']); ?>&nbsp;</td>
-		<td><?php echo h($fighter['Fighter']['name']); ?>&nbsp;</td>
-		<td><?php echo h($fighter['Fighter']['record']); ?>&nbsp;</td>
-		<td><?php echo h($fighter['Fighter']['photo']); ?>&nbsp;</td>
-		<td><?php echo h($fighter['Fighter']['created']); ?>&nbsp;</td>
-		<td><?php echo h($fighter['Fighter']['modified']); ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $fighter['Fighter']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $fighter['Fighter']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $fighter['Fighter']['id']), null, __('Are you sure you want to delete # %s?', $fighter['Fighter']['id'])); ?>
-		</td>
-	</tr>
-<?php endforeach; ?>
-	</table>
+<div class="row">
+	<div class="span12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Record</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<?php foreach ($fighters as $fighter): ?>
+				<!-- table row -->
+				<tr>
+					<td><?php echo $fighter['Fighter']['id'] ?></td>
+					<td><?php echo $fighter['Fighter']['name'] ?></td>
+					<td><?php echo $fighter['Fighter']['record'] ?></td>
+					<td>
+						<a href="/admin/fighters/view/<?php echo $fighter['Fighter']['id'] ?>" class="btn btn-info">View</a>
+						<a href="/admin/fighters/edit/<?php echo $fighter['Fighter']['id'] ?>" class="btn btn-warning">Edit</a>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="row">
+	<div class="span12">
+		<a href="/admin/fighters/add" class="btn btn-primary">New Fighter</a>
+	</div>
+</div>
+<div class="row">&nbsp;</div>
+
 	<p>
 	<?php
 	echo $this->Paginator->counter(array(
 	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
 	));
 	?>	</p>
-	<div class="paging">
+	<div class="pagination">
+		<ul>
 	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+		echo $this->Paginator->prev(__('Prev'), array('escape' => false, 'tag' => 'li', 'disabledTag' => 'a'));
+		echo $this->Paginator->numbers(array('tag' => 'li', 'separator' => '', 'currentClass' => 'active', 'currentTag' => 'a'));
+		echo $this->Paginator->next(__('Next'), array('escape' => false, 'tag' => 'li', 'disabledTag' => 'a'));
 	?>
+		</ul>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Fighter'), array('action' => 'add')); ?></li>
-	</ul>
 </div>

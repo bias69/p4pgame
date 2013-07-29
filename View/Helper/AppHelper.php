@@ -32,4 +32,56 @@ App::uses('Helper', 'View');
  * @package       app.View.Helper
  */
 class AppHelper extends Helper {
+
+	public function eventStatusBtn($status = null) {
+		switch ($status) {
+			case 'Draft':
+				return 'label';
+				break;
+			
+			case 'Published':
+				return 'label label-success';
+				break;
+
+			case 'Ended':
+				return 'label label-important';
+				break;
+
+			case 'Closed':
+				return 'label label-inverse';
+				break;
+		}
+		return false;
+	}
+
+	public function activeStatus($status = null) {
+		if(!array_key_exists('status', $this->params['named'])) {
+			if($status == 'all') {
+				return 'class="active"';
+			}
+		}
+		else {
+			if ($status == $this->params['named']['status']) {
+				return 'class="active"';
+			}
+		}
+		
+	}
+
+	public function activeController($controller = null) {
+		if($controller == $this->params['controller']) {
+			return 'class="active"';
+		}
+	}
+
+	public function resultIcon($bool = false) {
+		if($bool) {
+			return '<i class="icon-ok"></i>';
+		}
+		else {
+			return '<i class="icon-remove"></i>';
+		}
+	}
+
+
 }

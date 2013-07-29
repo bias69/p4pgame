@@ -8,6 +8,8 @@ App::uses('AppModel', 'Model');
  */
 class Bet extends AppModel {
 
+	public $actsAs = array('Containable');
+
 /**
  * Validation rules
  *
@@ -42,8 +44,14 @@ class Bet extends AppModel {
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
+			)
 		),
+		'type' => array(
+			'allowedChoice' => array(
+				'rule' => array('inList', array('1', '2', 'X', 'O')),
+				'message' => 'can be 1,2,X,O'
+			)
+		)
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed

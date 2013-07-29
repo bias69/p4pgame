@@ -9,11 +9,17 @@ App::uses('AppController', 'Controller');
 class BetsController extends AppController {
 
 /**
- * Components
+ * paginate
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public $paginate = array(
+		'fields' => array('id', 'fight_date'),
+		'contain' => array('Fighter' => array('fields' => array('name')),
+						'Bet' => array('fields' => array('id', 'bet_name', 'odds', 'type', 'event_id'))),
+		'conditions' => array('Event.status' => array('Draft')),
+		'limit' => 10
+		);
 
 /**
  * admin_index method
@@ -21,8 +27,7 @@ class BetsController extends AppController {
  * @return void
  */
 	public function admin_index() {
-		$this->Bet->recursive = 0;
-		$this->set('bets', $this->Paginator->paginate());
+		$this->set('events', $this->paginate('Event'));
 	}
 
 /**
@@ -42,21 +47,30 @@ class BetsController extends AppController {
 
 /**
  * admin_add method
- *
+ * @throws NotFoundException
  * @return void
  */
-	public function admin_add() {
+	public function admin_add($event_id = null) {
 		if ($this->request->is('post')) {
 			$this->Bet->create();
 			if ($this->Bet->save($this->request->data)) {
-				$this->Session->setFlash(__('The bet has been saved'));
+				$this->Session->setFlash(__('The bet has been saved'), 'flash_success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The bet could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The bet could not be saved. Please, try again.'), 'flash_error');
 			}
 		}
-		$events = $this->Bet->Event->find('list');
-		$this->set(compact('events'));
+		if ($event_id) {
+			if($this->Bet->Event->exists($event_id)) {
+				$event = $this->Bet->Event->find('first', array('conditions' => array('Event.id' => $event_id), 
+					'contain' => array('Fighter' => array('fields' => array('name'))), 'fields' => array('fight_date')));
+				$this->request->data['Bet']['event_id'] = $event['Event']['id'];
+				$this->set(compact('event'));
+			}
+		}
+		else {
+			throw new NotFoundException(__('No Event specified'));
+		}
 	}
 
 /**
@@ -72,18 +86,18 @@ class BetsController extends AppController {
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Bet->save($this->request->data)) {
-				$this->Session->setFlash(__('The bet has been saved'));
+				$this->Session->setFlash(__('The bet has been saved'), 'flash_success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The bet could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The bet could not be saved. Please, try again.'), 'flash_error');
 			}
 		} else {
 			$options = array('conditions' => array('Bet.' . $this->Bet->primaryKey => $id));
 			$this->request->data = $this->Bet->find('first', $options);
 		}
-		$events = $this->Bet->Event->find('list');
-		$users = $this->Bet->User->find('list');
-		$this->set(compact('events', 'users'));
+		$event = $this->Bet->Event->find('first', array('conditions' => array('Event.id' => $this->request->data['Bet']['event_id']), 
+			'contain' => array('Fighter' => array('fields' => array('name'))), 'fields' => array('fight_date')));
+		$this->set(compact('event'));
 	}
 
 /**

@@ -1,56 +1,54 @@
-<div class="bets index">
-	<h2><?php echo __('Bets'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
-	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('bet_name'); ?></th>
-			<th><?php echo $this->Paginator->sort('odds'); ?></th>
-			<th><?php echo $this->Paginator->sort('won'); ?></th>
-			<th><?php echo $this->Paginator->sort('event_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th><?php echo $this->Paginator->sort('modified'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
-	</tr>
-	<?php foreach ($bets as $bet): ?>
-	<tr>
-		<td><?php echo h($bet['Bet']['id']); ?>&nbsp;</td>
-		<td><?php echo h($bet['Bet']['bet_name']); ?>&nbsp;</td>
-		<td><?php echo h($bet['Bet']['odds']); ?>&nbsp;</td>
-		<td><?php echo h($bet['Bet']['won']); ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($bet['Event']['id'], array('controller' => 'events', 'action' => 'view', $bet['Event']['id'])); ?>
-		</td>
-		<td><?php echo h($bet['Bet']['created']); ?>&nbsp;</td>
-		<td><?php echo h($bet['Bet']['modified']); ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $bet['Bet']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $bet['Bet']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $bet['Bet']['id']), null, __('Are you sure you want to delete # %s?', $bet['Bet']['id'])); ?>
-		</td>
-	</tr>
+<?php foreach ($events as $event): ?>
+	<div class="row">
+		<div class="span12">
+			<div class="row">
+				<div class="span10">
+					<h4><?php echo $event['Event']['fight_date'] ?>: <?php echo $event['Fighter'][0]['name'] ?> vs <?php echo $event['Fighter'][1]['name'] ?></h4>
+				</div>
+				<div class="span2 text-right">
+					<a href="/admin/bets/add/<?php echo $event['Event']['id'] ?>" class="btn btn-primary">New Bet</a>
+				</div>
+			</div>
+			
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Bet</th>
+						<th>Odds</th>
+						<th>Type</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+
+				<tbody>
+						<?php foreach ($event['Bet'] as $bet): ?>
+						<tr>
+							<td><?php echo $bet['bet_name'] ?></td>
+							<td><?php echo number_format($bet['odds'], 2) ?></td>
+							<td><?php echo $bet['type'] ?></td>
+							<td><a href="/admin/bets/edit/<?php echo $bet['id'] ?>" class="btn btn-warning">Edit</a></td>
+						</tr>
+						<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
 <?php endforeach; ?>
-	</table>
+<div class="row">&nbsp;</div>
+
 	<p>
 	<?php
 	echo $this->Paginator->counter(array(
 	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
 	));
 	?>	</p>
-	<div class="paging">
+	<div class="pagination">
+		<ul>
 	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+		echo $this->Paginator->prev(__('Prev'), array('escape' => false, 'tag' => 'li', 'disabledTag' => 'a'));
+		echo $this->Paginator->numbers(array('tag' => 'li', 'separator' => '', 'currentClass' => 'active', 'currentTag' => 'a'));
+		echo $this->Paginator->next(__('Next'), array('escape' => false, 'tag' => 'li', 'disabledTag' => 'a'));
 	?>
+		</ul>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Bet'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Events'), array('controller' => 'events', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Event'), array('controller' => 'events', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-	</ul>
 </div>

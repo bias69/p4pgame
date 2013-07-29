@@ -1,52 +1,91 @@
-<div class="events index">
-	<h2><?php echo __('Events'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
-	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('fight_date'); ?></th>
-			<th><?php echo $this->Paginator->sort('bets_close_time'); ?></th>
-			<th><?php echo $this->Paginator->sort('result'); ?></th>
-			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th><?php echo $this->Paginator->sort('modified'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
-	</tr>
-	<?php foreach ($events as $event): ?>
-	<tr>
-		<td><?php echo h($event['Event']['id']); ?>&nbsp;</td>
-		<td><?php echo h($event['Event']['fight_date']); ?>&nbsp;</td>
-		<td><?php echo h($event['Event']['bets_close_time']); ?>&nbsp;</td>
-		<td><?php echo h($event['Event']['result']); ?>&nbsp;</td>
-		<td><?php echo h($event['Event']['created']); ?>&nbsp;</td>
-		<td><?php echo h($event['Event']['modified']); ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $event['Event']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $event['Event']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $event['Event']['id']), null, __('Are you sure you want to delete # %s?', $event['Event']['id'])); ?>
-		</td>
-	</tr>
-<?php endforeach; ?>
-	</table>
+<?php echo $this->element('events_navbar'); ?>
+
+<div class="row">
+	<div class="span12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Status</th>
+					<th>Fight Date</th>
+					<th>Fighters</th>
+					<th>Bets Close Time</th>
+					<th>Result</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<?php foreach ($events as $event): ?>
+				<!-- table row -->
+				<tr>
+					<td><span class="<?php echo $this->Html->eventStatusBtn($event['Event']['status']); ?>"><?php echo $event['Event']['status']; ?></span></td>
+					<td><?php echo $event['Event']['fight_date']; ?></td>
+					<td>
+						<?php
+							$i = 0;
+							foreach ($event['Fighter'] as $fighter) {
+								echo $fighter['name'].' ';
+								if ($i == 0) echo 'vs ';
+								$i++;
+							}
+						?>
+					</td>
+					<td><?php echo $event['Event']['bets_close_time'] ?> (CET)</td>
+					<td><?php echo $this->Html->resultIcon($event['Event']['result']); ?></td>
+					<td>
+						<?php if($event['Event']['status'] == 'Draft'): ?>
+							<a href="/admin/events/edit/<?php echo $event['Event']['id'] ?>" class="btn btn-warning">Edit</a>
+						<?php endif; ?>
+						<?php if($event['Event']['status'] == 'Draft'): ?>
+							<a href="/admin/events/publish/<?php echo $event['Event']['id'] ?>" class="btn btn-success">Publish</a>
+						<?php endif; ?>
+						<?php if($event['Event']['status'] == 'Published' && $event['Event']['bets_close_time'] > date('Y-m-d G:i:s')): ?>
+							<a href="/admin/events/unpublish/<?php echo $event['Event']['id'] ?>" class="btn">Unpublish</a>
+						<?php endif; ?>
+						<?php if($event['Event']['status'] == 'Draft'): ?>
+							<?php echo $this->Html->link(__('Delete'), array('controller' => 'events', 'action' => 'delete', $event['Event']['id']), 
+								array('class' => 'btn btn-danger'), __('Are you sure you want to delete this event?')); ?>
+						<?php endif; ?>						
+						<?php if($event['Event']['status'] == 'Published' && $event['Event']['promoted'] == false && $event['Event']['bets_close_time'] > date('Y-m-d G:i:s')): ?>
+							<a href="/admin/events/promote/<?php echo $event['Event']['id'] ?>" class="btn btn-info">Promote</a>
+						<?php endif; ?>
+						<?php if($event['Event']['status'] == 'Published' && $event['Event']['promoted'] == true && $event['Event']['bets_close_time'] > date('Y-m-d G:i:s')): ?>
+							<a href="/admin/events/unpromote/<?php echo $event['Event']['id'] ?>" class="btn">Unpromote</a>
+						<?php endif; ?>
+						<?php if($event['Event']['status'] == 'Published' && $event['Event']['bets_close_time'] <= date('Y-m-d G:i:s')): ?>
+							<a href="/admin/events/end_event/<?php echo $event['Event']['id'] ?>" class="btn btn-danger">End</a>
+						<?php endif; ?>
+						<?php if($event['Event']['status'] == 'Ended'): ?>
+							<a href="/admin/events/payout/<?php echo $event['Event']['id'] ?>" class="btn btn-danger">Payout</a>
+						<?php endif; ?>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="row">
+	<div class="span12">
+		<a href="/admin/events/add" class="btn btn-primary">New Event</a>
+	</div>
+</div>
+<div class="row">&nbsp;</div>
+
 	<p>
 	<?php
 	echo $this->Paginator->counter(array(
 	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
 	));
 	?>	</p>
-	<div class="paging">
+	<div class="pagination">
+		<ul>
 	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+		echo $this->Paginator->prev(__('Prev'), array('escape' => false, 'tag' => 'li', 'disabledTag' => 'a'));
+		echo $this->Paginator->numbers(array('tag' => 'li', 'separator' => '', 'currentClass' => 'active', 'currentTag' => 'a'));
+		echo $this->Paginator->next(__('Next'), array('escape' => false, 'tag' => 'li', 'disabledTag' => 'a'));
 	?>
+		</ul>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Event'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Bets'), array('controller' => 'bets', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Bet'), array('controller' => 'bets', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Fighters'), array('controller' => 'fighters', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Fighter'), array('controller' => 'fighters', 'action' => 'add')); ?> </li>
-	</ul>
 </div>
