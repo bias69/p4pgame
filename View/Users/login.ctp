@@ -26,3 +26,10 @@
 		</div>
 	</div>
 </div>
+<div class="row">&nbsp;</div>
+<div class="row">
+	<div class="span1"></div>
+	<div class="span11">
+		<p>Don't have an account? <?php echo $this->Html->link(__('Sign up'), array('controller' => 'users', 'action' => 'add'))?></p>
+	</div>
+</div>

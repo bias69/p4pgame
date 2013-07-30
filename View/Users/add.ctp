@@ -31,7 +31,7 @@
 		<?php //echo $this->Form->input('role') ?>
 
 		<div class="control-group">
-			<?php echo $this->Form->end(array('label' => __('Sign in'), 'class' => 'btn', 'div' => 'controls')) ?>
+			<?php echo $this->Form->end(array('label' => __('Sign up'), 'class' => 'btn', 'div' => 'controls')) ?>
 		</div>
 	</div>
 </div>
