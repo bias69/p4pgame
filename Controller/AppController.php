@@ -61,6 +61,8 @@ class AppController extends Controller {
 		else {
 			$this->layout ='user';
 		}
+
+		$this->set('loggedIn', $this->Auth->loggedIn());
 	}
 
 }

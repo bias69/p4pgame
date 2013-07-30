@@ -83,5 +83,4 @@ class AppHelper extends Helper {
 		}
 	}
 
-
 }

@@ -20,7 +20,9 @@
 	        	<p></p>
 	        	<p></p>
 	        	<p></p>
-	         	<p class="text-right"><?php echo $this->Html->link('logout', '/users/logout') ?></p>
+	         	<p class="text-right">
+	         		<?php echo $loggedIn ? $this->Html->link('logout', '/users/logout') : $this->Html->link('login', '/users/login')?>
+	         	</p>
 	        </div>
       	</div>
       	<?php echo $this->element('admin_navbar'); ?>

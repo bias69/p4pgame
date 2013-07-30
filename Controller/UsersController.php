@@ -96,10 +96,10 @@ class UsersController extends AppController {
 				$this->User->Code->data['Code']['user_id'] = $this->User->id;
 				$this->User->Code->save();
 				$this->User->Code->sendActivationCode($this->User->id);
-				$this->Session->setFlash(__('The user has been saved and activation code sent to your email address.'));
+				$this->Session->setFlash(__('The user has been saved and activation code sent to your email address.'), 'flash_success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The user could not be saved. Please, try again.'), 'flash_error');
 			}
 		}
 	}
