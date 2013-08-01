@@ -53,7 +53,9 @@ class BetsUsersController extends AppController {
 			$this->BetsUser->set('bet_id', $this->request->data['bet_id']);
 			$this->BetsUser->set('user_id', $this->Auth->user('id'));
 			$this->BetsUser->set('ammount', $this->request->data['bet_ammount']);
-			$this->BetsUser->save();
+			if($this->BetsUser->save()) {
+				$this->_subtractAmmount();
+			}
 			if(isset($this->BetsUser->validationErrors) && !empty($this->BetsUser->validationErrors)) {
 				return json_encode($this->BetsUser->validationErrors);
 			}
