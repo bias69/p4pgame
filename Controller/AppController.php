@@ -37,8 +37,10 @@ class AppController extends Controller {
 	public $components = array(
 		'DebugKit.Toolbar', 
 		'Auth' => array(
-            'loginRedirect' => array('controller' => 'users', 'action' => 'index'),
-            'logoutRedirect' => array('controller' => 'users', 'action' => 'login')
+            'loginRedirect' => array('controller' => 'events', 'action' => 'index'),
+            'logoutRedirect' => array('controller' => 'users', 'action' => 'login'),
+            'flash' => array('element' => 'flash_error', 'key' => 'auth', array())
+
         ), 
 		'Session');
 

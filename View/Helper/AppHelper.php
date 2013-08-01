@@ -68,8 +68,9 @@ class AppHelper extends Helper {
 		
 	}
 
-	public function activeController($controller = null) {
-		if($controller == $this->params['controller']) {
+	public function activeController($controller = null, $action = true) {
+		if($controller == $this->params['controller'] &&
+			$action == $this->params['action']) {
 			return 'class="active"';
 		}
 	}
@@ -80,6 +81,25 @@ class AppHelper extends Helper {
 		}
 		else {
 			return '<i class="icon-remove"></i>';
+		}
+	}
+
+	public function betButton($betType = null, $betArray = array()) {
+		if($betType == 'O' && is_array($betArray) && !empty($betArray)) {
+			$otherBetsArray = array();
+			foreach ($betArray as $bet) {
+				if($bet['type'] == 'O') {
+					$otherBetsArray[] = $bet;
+				}
+			}
+			return $otherBetsArray;
+		}
+		if($betType && is_array($betArray) && !empty($betArray)) {
+			foreach ($betArray as $bet) {
+				if($bet['type'] == $betType) {
+					return array('bet_name' => $bet['bet_name'], 'bet_id' => $bet['id'], 'odds' => $bet['odds']);
+				}
+			}
 		}
 	}
 

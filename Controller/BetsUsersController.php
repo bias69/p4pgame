@@ -46,6 +46,26 @@ class BetsUsersController extends AppController {
 		$this->set('betsUser', $this->BetsUser->find('first', $options));
 	}
 
+	public function place_bet() {
+		$this->layout = 'ajax';
+		$this->autoRender = false;
+		if ($this->request->is('ajax')) {
+			$this->BetsUser->set('bet_id', $this->request->data['bet_id']);
+			$this->BetsUser->set('user_id', $this->Auth->user('id'));
+			$this->BetsUser->set('ammount', $this->request->data['bet_ammount']);
+			$this->BetsUser->save();
+			if(isset($this->BetsUser->validationErrors) && !empty($this->BetsUser->validationErrors)) {
+				return json_encode($this->BetsUser->validationErrors);
+			}
+			else {
+				return json_encode(array('success' => 'success'));
+			}
+		}
+		else {
+			throw new BadRequestException(__('Not allowed'));
+		}
+	}
+
 /**
  * add method
  *

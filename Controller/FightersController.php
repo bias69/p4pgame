@@ -50,10 +50,10 @@ class FightersController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Fighter->create();
 			if ($this->Fighter->save($this->request->data)) {
-				$this->Session->setFlash(__('The fighter has been saved'));
+				$this->Session->setFlash(__('The fighter has been saved'), 'flash_success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The fighter could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The fighter could not be saved. Please, try again.'), 'flash_error');
 			}
 		}
 	}

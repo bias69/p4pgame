@@ -22,6 +22,15 @@ class EventsController extends AppController {
 		'order' => array('bets_close_time' => 'asc')
 	);
 
+/**
+ * beforeFilter method
+ * @return void
+ */
+
+	public function beforeFilter() {
+		parent::beforeFilter();
+		$this->Auth->allow('index', 'results');
+	}
 
 /**
  * view method
@@ -38,6 +47,30 @@ class EventsController extends AppController {
 		$this->set('event', $this->Event->find('first', $options));
 	}
 
+/**
+ * index method
+ *
+ * @return void
+ */
+	public function index() {
+		$events = $this->Event->getPublishedEvents();
+		if(!empty($events)) {
+			foreach ($events as &$event) {
+				$event['Event']['description'] = $this->Event->prepareDescription($event['Event']['description']);
+			}			
+		}
+		$promoted_event = $this->Event->getPublishedEvents(true);
+		if(!empty($promoted_event)) {
+			$promoted_event['Event']['description'] = $this->Event->prepareDescription($promoted_event['Event']['description']);
+		}		
+		$this->set(compact('events', 'promoted_event'));
+	}
+
+/**
+ * admin_payout method
+ *
+ * @return void
+ */
 
 	public function admin_payout($id) {
 		if (!$this->Event->exists($id)) {

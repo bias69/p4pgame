@@ -3,36 +3,48 @@
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		<?php echo $title_for_layout; ?>
+		P4PGame.pl <?php echo $title_for_layout; ?>
 	</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="/css/site.css" rel="stylesheet" media="screen">
+	<link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/css/site.css" rel="stylesheet" media="screen">
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-	        <div class="span8">
-	        	<h1>P4PGame</h1>
-	        </div>
-	        <div class="span4">
-	        	<p></p>
-	        	<p></p>
-	        	<p></p>
-	        	<p></p>
-	         	<p class="text-right">
-	         		<?php echo $loggedIn ? $this->Html->link('logout', '/users/logout') : $this->Html->link('login', '/users/login')?>
-	         	</p>
-	        </div>
-      	</div>
-      	<?php echo $this->element('admin_navbar'); ?>
+	<div id="wrap">
+		<div class="container">
+			<div class="row">
+				<div class="span8">
+				<h1><span class="red">P4P</span><span class="blue">Game</span></h1>
+				</div>
+				<div class="span4">
+					<p></p>
+					<p></p>
+					<p></p>
+					<p></p>
+					<p class="text-right">
+						<?php 
+							if ($loggedIn) echo 'Credits: '.$this->Session->read('Auth.User.credits').', ';
+							if ($loggedIn) echo $this->Session->read('Auth.User.username').', ';
+							echo $loggedIn ? $this->Html->link('logout', '/users/logout') : $this->Html->link('login', '/users/login');
+						?>
+					</p>
+				</div>
+			</div>
+			<?php echo $this->element('user_navbar'); ?>
 
-		<?php echo $this->Session->flash(); ?>
+			<?php echo $this->Session->flash(); ?>
 
-		<?php echo $this->fetch('content'); ?>
+			<?php echo $this->fetch('content'); ?>
+		</div>
+		<div id="push"></div>
 	</div>
+	<?php echo $this->element('footer') ?>
 	<?php 
-		echo $this->Html->script(array('http://code.jquery.com/jquery.js', 'bootstrap.min'));
+		echo $this->Html->script(array('http://code.jquery.com/jquery.js', 'bootstrap.min', 'site'));
 	?>
 </body>
+	<?php echo $this->element('bet_modal') ?>
+	<div id="place-bet-alert" class="alert alert-success">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
 </html>

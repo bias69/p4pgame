@@ -96,4 +96,53 @@ class Event extends AppModel {
 		)
 	);
 
+/**
+ * getPublishedEvents method
+ * @return array
+ */
+	public function getPublishedEvents($promoted = false) {
+		$options = array(
+			'fields' => array(
+					'Event.id',
+					'Event.fight_date',
+					'Event.bets_close_time',
+					'Event.description',
+					'Event.promoted'
+				),
+			'contain' => array(
+					'Bet' => array(
+							'fields' => array(
+									'Bet.id',
+									'Bet.bet_name',
+									'Bet.odds',
+									'Bet.type',
+									'Bet.event_id'
+								)
+						),
+					'Fighter' => array(
+							'fields' => array(
+									'Fighter.id',
+									'Fighter.name',
+									'Fighter.record',
+									'Fighter.photo',
+									'Fighter.photo_dir'
+								)
+						)
+				),
+			'conditions' => array(
+					'Event.status' => 'Published',
+					'Event.promoted' => $promoted
+				),
+			'order' => array('bets_close_time' => 'asc')
+		);
+		$method = $promoted ? 'first' : 'all';
+		return $this->find($method, $options);
+	}
+
+	public function prepareDescription($description = null) {
+		if($description) {
+			return explode(';',$description);
+		}
+	}
+
 }
