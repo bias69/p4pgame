@@ -145,7 +145,7 @@ class BetsUsersController extends AppController {
 	private function _subtractAmmount() {
 		$this->BetsUser->User->recursive = 0;
 		$this->BetsUser->User->read(array('credits'), $this->Auth->user('id'));
-		$credits = (int) $this->BetsUser->User->field('credits') - (int) $this->request->data['BetsUser']['ammount'];
+		$credits = (int) $this->BetsUser->User->field('credits') - (int) $this->request->data['bet_ammount'];
 		$this->BetsUser->User->set('credits', $credits);
 		$this->BetsUser->User->save();
 	}
