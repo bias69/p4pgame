@@ -6,7 +6,10 @@ $(document).ready(function() {
 		$.post('/betsusers/place_bet',$('#bet-form').serialize(), function(data) {
 			$('#place-bet-error').remove();
 			var data = $.parseJSON(data);
-			if(data.ammount) {
+			if(data.login) {
+				$('<div id="place-bet-error" class="red">You have to sign in first!</div>').insertAfter('input[name=bet_ammount]');
+			}
+			else if(data.ammount) {
 				$('<div id="place-bet-error" class="red">You don\'t have enough credits!</div>').insertAfter('input[name=bet_ammount]');
 			}
 			else if(data.success) {

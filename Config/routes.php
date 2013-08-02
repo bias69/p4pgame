@@ -26,8 +26,15 @@
  * Here, we are connecting '/' (base path) to controller called 'Pages',
  * its action called 'display', and we pass a param to select the view file
  * to use (in this case, /app/View/Pages/home.ctp)...
- */
-	Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
+*/
+	Router::connect('/', array('controller' => 'events', 'action' => 'index'));
+	Router::connect('/register', array('controller' => 'users', 'action' => 'add'));
+	Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
+	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
+	Router::connect('/rank', array('controller' => 'users', 'action' => 'show_rank'));
+	Router::connect('/results', array('controller' => 'events', 'action' => 'show_results'));
+	Router::connect('/my_bets', array('controller' => 'betsusers', 'action' => 'index'));
+	Router::connect('/admin', array('controller' => 'events', 'action' => 'index', 'admin' => true));
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */

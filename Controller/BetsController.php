@@ -62,8 +62,11 @@ class BetsController extends AppController {
 		}
 		if ($event_id) {
 			if($this->Bet->Event->exists($event_id)) {
-				$event = $this->Bet->Event->find('first', array('conditions' => array('Event.id' => $event_id), 
+				$event = $this->Bet->Event->find('first', array('conditions' => array('Event.id' => $event_id, 'Event.status' => 'Draft'), 
 					'contain' => array('Fighter' => array('fields' => array('name'))), 'fields' => array('fight_date')));
+				if(empty($event)) {
+					throw new BadRequestException(__('Event is not a draft'));
+				}
 				$this->request->data['Bet']['event_id'] = $event['Event']['id'];
 				$this->set(compact('event'));
 			}

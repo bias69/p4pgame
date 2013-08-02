@@ -8,17 +8,9 @@ App::uses('AppController', 'Controller');
  */
 class BetsUsersController extends AppController {
 
-/**
- * Components
- *
- * @var array
- */
-	public $components = array('Paginator');
-
-
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->deny();
+		$this->Auth->deny('index');
 	}
 
 /**
@@ -27,8 +19,24 @@ class BetsUsersController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->BetsUser->recursive = 0;
-		$this->set('betsUsers', $this->Paginator->paginate());
+		// get all current user's bets
+		$betsUsers = $this->BetsUser->find('all', array('conditions' => array('BetsUser.user_id' => $this->Auth->user('id')),
+			'fields' => array('id', 'bet_id', 'user_id', 'ammount'),
+			'contain' => array('Bet' => array('fields' => array('id', 'bet_name', 'odds', 'won', 'event_id'))),
+			));
+		// extract unique id's of events these bets belong to
+		$event_ids = array();
+		foreach ($betsUsers as $betsUser) {
+			$event_ids[] = $betsUser['Bet']['event_id'];
+		}
+		$event_ids = array_unique($event_ids);
+		// get only events user placed bets on
+		$events = $this->BetsUser->Bet->Event->find('all', array(
+			'fields' => array('id', 'status', 'fight_date'),
+			'contain' => array('Fighter' => array('fields' => array('name'))),
+			'conditions' => array('Event.id' => $event_ids)
+		));
+		$this->set(compact('events', 'betsUsers'));
 	}
 
 /**
@@ -50,6 +58,9 @@ class BetsUsersController extends AppController {
 		$this->layout = 'ajax';
 		$this->autoRender = false;
 		if ($this->request->is('ajax')) {
+			if(!$this->Auth->loggedIn()) {
+				return json_encode(array('login' => 'You have to sign in first.'));
+			}
 			$this->BetsUser->set('bet_id', $this->request->data['bet_id']);
 			$this->BetsUser->set('user_id', $this->Auth->user('id'));
 			$this->BetsUser->set('ammount', $this->request->data['bet_ammount']);

@@ -29,7 +29,7 @@ class EventsController extends AppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('index', 'results');
+		$this->Auth->allow('index', 'show_results');
 	}
 
 /**
@@ -66,6 +66,20 @@ class EventsController extends AppController {
 		$this->set(compact('events', 'promoted_event'));
 	}
 
+/**
+ * show_results method
+ *
+ * @return void
+ */
+
+	public function show_results() {
+		$events = $this->Event->find('all', array(
+			'fields' => array('id', 'status', 'fight_date', 'result'),
+			'conditions' => array('status' => 'Closed'),
+			'contain' => array('Fighter' => array('fields' => array('name')))
+		));
+		$this->set(compact('events'));
+	}
 /**
  * admin_payout method
  *

@@ -9,6 +9,8 @@ App::uses('Event', 'Model');
  */
 class BetsUser extends AppModel {
 
+	public $actsAs = array('Containable');
+
 /**
  * Validation rules
  *

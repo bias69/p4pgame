@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
 	<?php echo $this->Html->charset(); ?>
-	<title>
-		P4PGame.pl <?php echo $title_for_layout; ?>
-	</title>
+	<title>P4PGame.pl</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="/css/site.css" rel="stylesheet" media="screen">
@@ -25,7 +23,8 @@
 						<?php 
 							if ($loggedIn) echo 'Credits: '.$this->Session->read('Auth.User.credits').', ';
 							if ($loggedIn) echo $this->Session->read('Auth.User.username').', ';
-							echo $loggedIn ? $this->Html->link('logout', '/users/logout') : $this->Html->link('login', '/users/login');
+							echo $loggedIn ? $this->Html->link('logout', array('controller' => 'users', 'action' => 'logout')) : 
+								$this->Html->link('login', array('controller' => 'users', 'action' => 'login'));
 						?>
 					</p>
 				</div>

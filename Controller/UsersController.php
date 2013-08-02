@@ -66,6 +66,16 @@ class UsersController extends AppController {
 	    $this->redirect($this->Auth->logout());
 	}
 
+/**
+ * show_rank method
+ * @return void
+ */
+
+	public function show_rank() {
+		$this->User->recursive = 0;
+		$users = $this->User->find('all', array('fields' => array('id', 'username', 'credits'), 'order' => 'credits DESC'));
+		$this->set(compact('users'));
+	}
 
 /**
  * view method
@@ -92,6 +102,7 @@ class UsersController extends AppController {
 			$this->User->create();
 			$this->request->data['User']['active'] = 0;
 			$this->request->data['User']['credits'] = 1000;
+			$this->request->data['User']['role'] = 'user';
 			if ($this->User->save($this->request->data)) {
 				$this->User->Code->data['Code']['user_id'] = $this->User->id;
 				$this->User->Code->save();
