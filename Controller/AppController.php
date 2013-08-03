@@ -40,7 +40,6 @@ class AppController extends Controller {
             'loginRedirect' => array('controller' => 'events', 'action' => 'index'),
             'logoutRedirect' => array('controller' => 'users', 'action' => 'login'),
             'flash' => array('element' => 'flash_error', 'key' => 'auth', array())
-
         ), 
 		'Session');
 

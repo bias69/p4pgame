@@ -31,21 +31,6 @@ class BetsController extends AppController {
 	}
 
 /**
- * view method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function view($id = null) {
-		if (!$this->Bet->exists($id)) {
-			throw new NotFoundException(__('Invalid bet'));
-		}
-		$options = array('conditions' => array('Bet.' . $this->Bet->primaryKey => $id));
-		$this->set('bet', $this->Bet->find('first', $options));
-	}
-
-/**
  * admin_add method
  * @throws NotFoundException
  * @return void
@@ -104,23 +89,23 @@ class BetsController extends AppController {
 	}
 
 /**
- * delete method
+ * admin_delete method
  *
  * @throws NotFoundException
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function admin_delete($id = null) {
 		$this->Bet->id = $id;
 		if (!$this->Bet->exists()) {
 			throw new NotFoundException(__('Invalid bet'));
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->Bet->delete()) {
-			$this->Session->setFlash(__('Bet deleted'));
+			$this->Session->setFlash(__('Bet deleted'), 'flash_success');
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->Session->setFlash(__('Bet was not deleted'));
+		$this->Session->setFlash(__('Bet was not deleted'), 'flash_error');
 		$this->redirect(array('action' => 'index'));
 	}
 }

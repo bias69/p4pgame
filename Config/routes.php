@@ -34,6 +34,7 @@
 	Router::connect('/rank', array('controller' => 'users', 'action' => 'show_rank'));
 	Router::connect('/results', array('controller' => 'events', 'action' => 'show_results'));
 	Router::connect('/my_bets', array('controller' => 'betsusers', 'action' => 'index'));
+	Router::connect('/place_bet', array('controller' => 'betsusers', 'action' => 'place_bet'));
 	Router::connect('/admin', array('controller' => 'events', 'action' => 'index', 'admin' => true));
 /**
  * ...and connect the rest of 'Pages' controller's URLs.

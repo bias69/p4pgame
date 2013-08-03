@@ -26,7 +26,16 @@
 							<td><?php echo $bet['bet_name'] ?></td>
 							<td><?php echo number_format($bet['odds'], 2) ?></td>
 							<td><?php echo $bet['type'] ?></td>
-							<td><a href="/admin/bets/edit/<?php echo $bet['id'] ?>" class="btn btn-warning">Edit</a></td>
+							<td>
+								<?php echo $this->Html->link(__('Edit'), 
+									array('controller' => 'bets', 'action' => 'edit', $bet['id']),
+									array('class' => 'btn btn-warning'))
+								?>
+								<?php echo $this->Form->postLink(__('Delete'), 
+									array('controller' => 'bets', 'action' => 'delete', $bet['id']), 
+									array('class' => 'btn btn-danger'), __('Are you sure you want to delete # %s?', $bet['id']))
+								?>
+							</td>
 						</tr>
 						<?php endforeach; ?>
 				</tbody>

@@ -24,6 +24,10 @@ class User extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'alphanumeric' => array(
+				'rule' => array('alphaNumeric'),
+				'message' => 'only letters and numbers'
+			),
 			'unique' => array(
 				'rule' => 'isUnique',
 				'message' => 'Username already in use'

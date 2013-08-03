@@ -3,7 +3,7 @@ $(document).ready(function() {
 	var fightData = {};
 
 	var placeBet = function() {
-		$.post('/betsusers/place_bet',$('#bet-form').serialize(), function(data) {
+		$.post('/place_bet',$('#bet-form').serialize(), function(data) {
 			$('#place-bet-error').remove();
 			var data = $.parseJSON(data);
 			if(data.login) {
