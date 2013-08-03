@@ -35,7 +35,7 @@ class CodesController extends AppController {
 				$this->Code->User->set('active', 1);
 				if($this->Code->User->save()) {
 					$this->Code->delete($code);
-					$this->Session->setFlash(__('Your account has been activated'));
+					$this->Session->setFlash(__('Your account has been activated'), 'flash_success');
 					$this->redirect(array('controller' => 'users', 'action' => 'login'));
 				}
 			}

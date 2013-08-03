@@ -41,7 +41,7 @@ class EmailConfig {
 
 	public $default = array(
 		'transport' => 'Debug',
-		'from' => 'contact@p4pgame.pl',
+		'from' => 'noreply@p4pgame.pl',
 		'emailFormat' => 'text',
 		'template' => 'activation',
 		'layout' => 'activation',

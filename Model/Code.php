@@ -54,6 +54,7 @@ class Code extends AppModel {
 			$code = $this->find('first', array('conditions' => array('user_id' => $user_id)));
 			$email = new CakeEmail('default');
 			$email->to(array($user['User']['email'] => $user['User']['username']));
+			$email->subject('P4PGame.pl account activation');
 			$email->viewVars(array('username' => $user['User']['username'], 'code' => $code['Code']['id']));
 			$email->send();
 		}
