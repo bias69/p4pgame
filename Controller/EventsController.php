@@ -245,10 +245,12 @@ class EventsController extends AppController {
 		$user = new User();
 		$user->recursive = 0;
 		$userList = $user->find('all', array('conditions' => array('credits =' => 0), 'fields' => array('id', 'credits')));
-		foreach ($userList as &$userDetails) {
-			$userDetails['User']['credits'] = 75;
+		if(!empty($userList)) {
+			foreach ($userList as &$userDetails) {
+				$userDetails['User']['credits'] = 75;
+			}
+			$user->saveAll($userList);
 		}
-		$user->saveAll($userList);
 	}
 
 	private function _getNamedStatus() {

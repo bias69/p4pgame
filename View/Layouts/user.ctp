@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 	<?php echo $this->Html->charset(); ?>
-	<title>P4PGame.pl</title>
+	<title>P4PGame - The boxing bet game</title>
+	<meta name="robots" content="index, nofollow">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="/css/site.css" rel="stylesheet" media="screen">

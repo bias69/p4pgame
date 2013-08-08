@@ -131,7 +131,8 @@ class Event extends AppModel {
 				),
 			'conditions' => array(
 					'Event.status' => 'Published',
-					'Event.promoted' => $promoted
+					'Event.promoted' => $promoted,
+					'UNIX_TIMESTAMP(Event.bets_close_time) >=' => time()
 				),
 			'order' => array('bets_close_time' => 'asc')
 		);

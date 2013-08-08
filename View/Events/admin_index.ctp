@@ -39,20 +39,20 @@
 						<?php if($event['Event']['status'] == 'Draft'): ?>
 							<a href="/admin/events/publish/<?php echo $event['Event']['id'] ?>" class="btn btn-success">Publish</a>
 						<?php endif; ?>
-						<?php if($event['Event']['status'] == 'Published' && $event['Event']['bets_close_time'] > date('Y-m-d G:i:s')): ?>
+						<?php if($event['Event']['status'] == 'Published' && strtotime($event['Event']['bets_close_time']) > time()): ?>
 							<a href="/admin/events/unpublish/<?php echo $event['Event']['id'] ?>" class="btn">Unpublish</a>
 						<?php endif; ?>
 						<?php if($event['Event']['status'] == 'Draft'): ?>
-							<?php echo $this->Html->link(__('Delete'), array('controller' => 'events', 'action' => 'delete', $event['Event']['id']), 
+							<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'events', 'action' => 'delete', $event['Event']['id']), 
 								array('class' => 'btn btn-danger'), __('Are you sure you want to delete this event?')); ?>
 						<?php endif; ?>						
-						<?php if($event['Event']['status'] == 'Published' && $event['Event']['promoted'] == false && $event['Event']['bets_close_time'] > date('Y-m-d G:i:s')): ?>
+						<?php if($event['Event']['status'] == 'Published' && $event['Event']['promoted'] == false && strtotime($event['Event']['bets_close_time']) > time()): ?>
 							<a href="/admin/events/promote/<?php echo $event['Event']['id'] ?>" class="btn btn-info">Promote</a>
 						<?php endif; ?>
-						<?php if($event['Event']['status'] == 'Published' && $event['Event']['promoted'] == true && $event['Event']['bets_close_time'] > date('Y-m-d G:i:s')): ?>
+						<?php if($event['Event']['status'] == 'Published' && $event['Event']['promoted'] == true && strtotime($event['Event']['bets_close_time']) > time()): ?>
 							<a href="/admin/events/unpromote/<?php echo $event['Event']['id'] ?>" class="btn">Unpromote</a>
 						<?php endif; ?>
-						<?php if($event['Event']['status'] == 'Published' && $event['Event']['bets_close_time'] <= date('Y-m-d G:i:s')): ?>
+						<?php if($event['Event']['status'] == 'Published' && strtotime($event['Event']['bets_close_time']) <= time()): ?>
 							<a href="/admin/events/end_event/<?php echo $event['Event']['id'] ?>" class="btn btn-danger">End</a>
 						<?php endif; ?>
 						<?php if($event['Event']['status'] == 'Ended'): ?>

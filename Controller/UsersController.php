@@ -62,7 +62,9 @@ class UsersController extends AppController {
 
 	public function show_rank() {
 		$this->User->recursive = 0;
-		$users = $this->User->find('all', array('fields' => array('id', 'username', 'credits'), 'order' => 'credits DESC'));
+		$users = $this->User->find('all', array('fields' => array('id', 'username', 'credits', 'active'), 
+			'conditions' => array('active' => true),
+			'order' => 'credits DESC'));
 		$this->set(compact('users'));
 	}
 
